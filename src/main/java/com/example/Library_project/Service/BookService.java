@@ -1,5 +1,6 @@
 package com.example.Library_project.Service;
 
+import com.example.Library_project.exception.BookNotFoundException;
 import com.example.Library_project.model.Book;
 import com.example.Library_project.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,11 @@ public Book createBook(Book book){
 }
 public Book getBookById(Long id){
     return bookRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Error"));
+            .orElseThrow(()-> new BookNotFoundException(id));
 }
 public Book updateBook(Long id,Book updatedbook){
     Book existingbook=bookRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Error"));
+            .orElseThrow(()-> new BookNotFoundException(id));
     existingbook.setBookname(updatedbook.getBookname());
     existingbook.setDescription(updatedbook.getDescription());
     existingbook.setFinished(updatedbook.getFinished());
@@ -32,7 +33,7 @@ public Book updateBook(Long id,Book updatedbook){
 }
 public Book patchBook(Long id,Book updatedbook){
     Book existingbook=bookRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Error"));
+            .orElseThrow(()->  new BookNotFoundException(id));
     if (updatedbook.getBookname()!=null){
         existingbook.setBookname(updatedbook.getBookname());
     }
@@ -46,7 +47,7 @@ public Book patchBook(Long id,Book updatedbook){
 }
 public void deleteBook(Long id){
     Book existingbook=bookRepository.findById(id)
-            .orElseThrow(()-> new RuntimeException("Error"));
+            .orElseThrow(()-> new BookNotFoundException(id));
     bookRepository.delete(existingbook);
 }
 
